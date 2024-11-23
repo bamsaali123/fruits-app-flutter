@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Delivery extends StatelessWidget {
   Delivery({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,38 +42,40 @@ class Delivery extends StatelessWidget {
               trailing: Icon(Icons.phone_in_talk_rounded, color: Colors.orange),
             ),
             SizedBox(height: 20),
-            Container(
-              height: 300, 
-              width: double.infinity, // Ensure it takes the full width of the parent
-              child: Image.network(
-                'https://img.freepik.com/premium-photo/map-gps-road-route-direction-navigation-city-street-landmark-app-website-online-guide-location-digital-journey-info-travel-tourist-trip-icon_590464-334055.jpg?ga=GA1.1.119082994.1724718412&semt=ais_hybrid',
-                fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  } else {
+            // استخدام Expanded لحل مشكلة الـ overflow
+            Expanded(
+              child: Container(
+                width: double.infinity, // تأكد من أن الصورة ستأخذ عرض الشاشة بالكامل
+                child: Image.network(
+                  'https://img.freepik.com/premium-photo/map-gps-road-route-direction-navigation-city-street-landmark-app-website-online-guide-location-digital-journey-info-travel-tourist-trip-icon_590464-334055.jpg?ga=GA1.1.119082994.1724718412&semt=ais_hybrid',
+                  fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) {
                     return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                            : null,
+                      child: Text(
+                        'Image failed to load',
+                        style: TextStyle(color: Colors.white),
                       ),
                     );
-                  }
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Text(
-                      'Image failed to load',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
             ),
             SizedBox(height: 20),
             ListTile(
-              leading: Icon(Icons.check_circle, color: Colors.green, size: 40,),
+              leading: Icon(Icons.check_circle, color: Colors.green, size: 40),
               title: Text('Order Received', style: TextStyle(fontSize: 20, color: Colors.white)),
               trailing: Icon(Icons.more_horiz, color: Colors.white),
             ),
@@ -84,4 +86,3 @@ class Delivery extends StatelessWidget {
     );
   }
 }
-

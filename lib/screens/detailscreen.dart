@@ -6,7 +6,6 @@ class Detailscreen extends StatelessWidget {
   final String availableAmount;
   final String pricePerKilo;
 
-  // Static cart to store added items
   static List<Map<String, String>> cart = [];
 
   Detailscreen({
@@ -55,12 +54,15 @@ class Detailscreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    // حل مشكلة الـ overflow باستخدام FittedBox
                     ClipOval(
-                      child: Image.network(
-                        imageUrl,
+                      child: FittedBox(
                         fit: BoxFit.cover,
-                        width: 300,
-                        height: 300,
+                        child: Image.network(
+                          imageUrl,
+                          width: 300,
+                          height: 300,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -109,7 +111,6 @@ class Detailscreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
               onPressed: () {
-                // Check if the item is already in the cart
                 bool isAlreadyInCart = cart.any((item) =>
                     item['fruitName'] == fruitName &&
                     item['imageUrl'] == imageUrl &&
@@ -124,19 +125,17 @@ class Detailscreen extends StatelessWidget {
                     'pricePerKilo': pricePerKilo,
                   });
 
-                  // Show Snackbar for successful addition
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('$fruitName has been added to your cart.'),
-                      duration: Duration(seconds: 2), // Duration for how long the SnackBar will be visible
+                      duration: Duration(seconds: 2),
                     ),
                   );
                 } else {
-                  // Show Snackbar for item already in cart
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('$fruitName is already in your cart.'),
-                      duration: Duration(seconds: 2), // Duration for how long the SnackBar will be visible
+                      duration: Duration(seconds: 2),
                     ),
                   );
                 }
